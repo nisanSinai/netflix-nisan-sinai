@@ -1,0 +1,38 @@
+
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>סרטים • אינסוף־גלילה</title>
+    <style>
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin: 0; background: #0f172a; color: #e2e8f0; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+      .title { font-size: 28px; font-weight: 700; margin: 8px 0 20px; }
+      .toolbar { display:flex; gap:12px; margin-bottom:16px; }
+      .input { background:#0b1220; border:1px solid #1f2937; color:#e2e8f0; padding:10px 12px; border-radius:12px; width:260px; }
+      .card { background:#0b1220; border:1px solid #1f2937; border-radius:16px; overflow:hidden; box-shadow: 0 6px 24px rgba(0,0,0,.2); }
+      .card img { width: 100%; display:block; }
+      .card .meta { padding:10px 12px; display:flex; align-items:center; justify-content:space-between; }
+      .badge { font-size:12px; opacity:.8; }
+      .loader { text-align:center; padding: 16px; opacity:.8; }
+      .error { color:#fecaca; background:#450a0a; border:1px solid #7f1d1d; padding:12px; border-radius:12px; margin:12px 0; }
+      .empty { opacity:.7; text-align:center; padding: 32px 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
+client/src/api.js
+
+export async function fetchMovies({ page = 1, limit = 20, search = '' }, { signal } = {}) {
+  const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+  if (search) params.set('search', search);
+  const res = await fetch(`/api/movies?${params.toString()}`, { signal });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
